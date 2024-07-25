@@ -204,7 +204,7 @@ public class CasonaDeLalyForm extends javax.swing.JFrame {
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRealizarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarPedidoActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_btnRealizarPedidoActionPerformed
 
     /**
