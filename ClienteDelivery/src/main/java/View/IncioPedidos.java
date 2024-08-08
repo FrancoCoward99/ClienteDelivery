@@ -3,13 +3,20 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package View;
-
+import Model.Cliente;
+import View.RegistroCliente;
 /**
  *
  * @author Franco Coward
  */
 public class IncioPedidos extends javax.swing.JFrame {
+    private Cliente clienteActual;
 
+    // Constructor que acepta un objeto Cliente
+    public IncioPedidos(Cliente cliente) {
+        this.clienteActual = cliente;
+        initComponents();
+    }
     /**
      * Creates new form IncioPedidos
      */
@@ -144,8 +151,9 @@ public class IncioPedidos extends javax.swing.JFrame {
 
     private void btnCasonaLalyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasonaLalyActionPerformed
         // TODO add your handling code here:
-        CasonaDeLalyForm casonaDeLalyForm = new CasonaDeLalyForm();
-        casonaDeLalyForm.setVisible(true);
+CasonaDeLalyForm casonaDeLalyForm = new CasonaDeLalyForm(clienteActual);
+    casonaDeLalyForm.setVisible(true);
+    this.dispose();
     }//GEN-LAST:event_btnCasonaLalyActionPerformed
 
     /**

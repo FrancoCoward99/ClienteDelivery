@@ -8,6 +8,13 @@ import java.awt.BorderLayout;
 import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import Controller.FuncionesClienteDelivery;
+import Model.Cliente;
+import Model.Pedido;
+import Model.Producto;
+import Model.Restaurante;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -15,7 +22,16 @@ import javax.swing.table.DefaultTableModel;
  */
 public class CasonaDeLalyForm extends javax.swing.JFrame {
 
+    FuncionesClienteDelivery controlador = new FuncionesClienteDelivery();
+
     private DefaultTableModel modelo;
+
+    private Cliente clienteActual;
+
+    public CasonaDeLalyForm(Cliente cliente) {
+        this.clienteActual = cliente;
+        initComponents();
+    }
 
     /**
      * Creates new form CasonaDeLalyForm
@@ -178,33 +194,69 @@ public class CasonaDeLalyForm extends javax.swing.JFrame {
 
     private void btnCasadoAnniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCasadoAnniadirActionPerformed
         // TODO add your handling code here:
-        String texto = "Casado 3500 x1\n";
+        Producto casado = new Producto("Casado", 3500);
+        String texto = "Casado "+3500+"\n";
         txtAreaResumenPedido.append(texto);
 
     }//GEN-LAST:event_btnCasadoAnniadirActionPerformed
 
     private void btnChidrijoAnniadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnChidrijoAnniadirActionPerformed
         // TODO add your handling code here:
-        String texto = "Chifrijo 3500 \n";
+        Producto chifrijo = new Producto("Chifrijo", 3500);
+        String texto = "Chifrijo "+3500+"\n";
         txtAreaResumenPedido.append(texto);
     }//GEN-LAST:event_btnChidrijoAnniadirActionPerformed
 
     private void btnEliminarCasadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarCasadoActionPerformed
         // TODO add your handling code here:
-       String text = txtAreaResumenPedido.getText();
-    text = text.replace("Casado 3500 \n", "");
-    txtAreaResumenPedido.setText(text);
+        String text = txtAreaResumenPedido.getText();
+        text = text.replace("Casado 3500 \n", "");
+        txtAreaResumenPedido.setText(text);
     }//GEN-LAST:event_btnEliminarCasadoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         // TODO add your handling code here:
-         String text = txtAreaResumenPedido.getText();
-    text = text.replace("Chifrijo 3500 \n", "");
-    txtAreaResumenPedido.setText(text);
+        String text = txtAreaResumenPedido.getText();
+        text = text.replace("Chifrijo 3500 \n", "");
+        txtAreaResumenPedido.setText(text);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnRealizarPedidoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRealizarPedidoActionPerformed
-        
+        ArrayList<Producto> productosSeleccionados = new ArrayList<>();
+        String textoPedido = txtAreaResumenPedido.getText();
+        String[] lineasPedido = textoPedido.split("\n");
+
+        try {
+            for (String linea : lineasPedido) {
+                if (!linea.trim().isEmpty()) {
+                    int ultimoEspacio = linea.lastIndexOf(" ");
+                    if (ultimoEspacio > 0) {
+                        String nombreProducto = linea.substring(0, ultimoEspacio).trim();
+                        String precioProductoStr = linea.substring(ultimoEspacio + 1).trim();
+                        // Asegurarse de que el precio es numérico
+                        if (!precioProductoStr.matches("\\d+")) {
+                            throw new NumberFormatException("El precio debe ser un número entero sin caracteres adicionales.");
+                        }
+                        int precioProducto = Integer.parseInt(precioProductoStr);
+                        productosSeleccionados.add(new Producto(nombreProducto, precioProducto));
+                    } else {
+                        throw new Exception("Formato de línea incorrecto. Asegúrese de que haya un espacio entre el nombre del producto y el precio.");
+                    }
+                }
+            }
+
+            if (!productosSeleccionados.isEmpty()) {
+                // Abrir la nueva ventana de confirmación con los productos seleccionados
+                ValidarPedido validarPedido = new ValidarPedido(clienteActual, productosSeleccionados, "La Casona de Laly");
+                validarPedido.setVisible(true);
+            } else {
+                JOptionPane.showMessageDialog(this, "Por favor, añada productos a su pedido.");
+            }
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Error en el formato del precio: " + e.getMessage(), "Error de Formato", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error al procesar el pedido: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnRealizarPedidoActionPerformed
 
     /**
@@ -255,4 +307,8 @@ public class CasonaDeLalyForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea txtAreaResumenPedido;
     // End of variables declaration//GEN-END:variables
+
+    private ArrayList<Cliente> ListaClientes() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

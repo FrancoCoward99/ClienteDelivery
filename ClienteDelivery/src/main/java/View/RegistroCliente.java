@@ -6,6 +6,9 @@ package View;
 
 import Controller.FuncionesClienteDelivery;
 import Model.Cliente;
+import View.CasonaDeLalyForm;
+import View.IncioPedidos;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -151,13 +154,25 @@ public class RegistroCliente extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNumeroClienteActionPerformed
 
-    private void btnGuardarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarRegistroActionPerformed
-        // TODO add your handling code here:
-        controlador.ingresarClienteFormulario(txtNombreCliente, txtNumeroCliente, txtDireccionCliente);
 
-        IncioPedidos inicioPedido = new IncioPedidos();
+
+    private void btnGuardarRegistroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarRegistroActionPerformed
+     try {
+        String nombre = txtNombreCliente.getText();
+        int telefono = Integer.parseInt(txtNumeroCliente.getText());
+        String direccion = txtDireccionCliente.getText();
+
+        Cliente cliente = new Cliente(nombre, telefono, direccion);
+        controlador.agregarCliente(cliente);  // Asumimos que este método existe y maneja la lógica de añadir clientes
+
+        IncioPedidos inicioPedido = new IncioPedidos(cliente);
         inicioPedido.setVisible(true);
         this.dispose();
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "El número de teléfono debe ser numérico.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al guardar el cliente: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_btnGuardarRegistroActionPerformed
 
     /**
